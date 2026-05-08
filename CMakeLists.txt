@@ -93,6 +93,7 @@ export CUPDM_DIR=\"\$(builtin cd \"\$(dirname \"\${BASH_SOURCE[0]}\")\" && pwd)\
 
 export LD_LIBRARY_PATH=\"\$CUPDM_DIR/${CMAKE_INSTALL_LIBDIR}:\$LD_LIBRARY_PATH\"
 export ROOT_INCLUDE_PATH=\"\$CUPDM_DIR/include:\$ROOT_INCLUDE_PATH\"
+export CMAKE_PREFIX_PATH=\"\$CUPDM_DIR:\$CMAKE_PREFIX_PATH\"
 
 echo \"[CUPDataModel] Environment loaded from: \$CUPDM_DIR\"
 " )
