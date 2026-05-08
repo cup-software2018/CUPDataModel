@@ -5,6 +5,7 @@
 /lib
 /lib64
 /install
+/build_check
 /.cache
 /.clangd
 /.clang-format

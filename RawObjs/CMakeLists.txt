@@ -10,7 +10,7 @@ file ( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/
 file ( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h
      DESTINATION ${CUPDM_HEADER_OUTPUT_PATH}/${MODULE_NAME} )
 
-set ( DICT_I_FLAGS -I${CUPDM_HEADER_OUTPUT_PATH} )
+set ( DICT_I_FLAGS -I${CUPDM_HEADER_OUTPUT_PATH} -I${ROOT_INCLUDE_DIRS} )
 
 set ( DICT_HEADERS "" )
 foreach ( _h ${MODULE_HEADERS} )
@@ -33,17 +33,12 @@ target_include_directories ( ${MODULE_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-        ${ROOT_INCLUDE_DIRS}
 )
 
 target_link_libraries ( ${MODULE_NAME}
     PUBLIC
-        ${ROOT_LIBRARIES}
-)
-
-target_compile_definitions ( ${MODULE_NAME}
-    PUBLIC
-        ${ROOT_DEFINITIONS}
+        ROOT::Core
+        ROOT::RIO
 )
 
 set ( _INSTALL_HDRS "" )
@@ -53,7 +48,10 @@ foreach ( _h ${MODULE_HEADERS} )
 endforeach ()
 
 # ---- Install ----
-install ( TARGETS ${MODULE_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} )
+install ( TARGETS ${MODULE_NAME}
+    EXPORT  CUPDataModelTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
 install ( DIRECTORY inc/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hh"

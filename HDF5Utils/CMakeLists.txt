@@ -12,6 +12,7 @@ file ( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h
 
 set ( DICT_I_FLAGS
     -I${CUPDM_HEADER_OUTPUT_PATH}
+    -I${ROOT_INCLUDE_DIRS}
     -I${HDF5_INCLUDE_DIRS}
 )
 
@@ -36,24 +37,14 @@ target_include_directories ( ${MODULE_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-        ${ROOT_INCLUDE_DIRS}
-        ${HDF5_INCLUDE_DIRS}
 )
 
 target_link_libraries ( ${MODULE_NAME}
     PUBLIC
-        ${ROOT_LIBRARIES}
-        ${HDF5_LIBRARIES}
+        ROOT::Core
+        hdf5::hdf5
+        hdf5::hdf5_cpp
 )
-
-target_compile_definitions ( ${MODULE_NAME}
-    PUBLIC
-        ${ROOT_DEFINITIONS}
-)
-
-if ( DEFINED HDF5_DEFINITIONS )
-    target_compile_definitions ( ${MODULE_NAME} PUBLIC ${HDF5_DEFINITIONS} )
-endif ()
 
 set ( _INSTALL_HDRS "" )
 foreach ( _h ${MODULE_HEADERS} )
@@ -67,7 +58,10 @@ foreach ( _d ${HDF5_INCLUDE_DIRS} )
 endforeach ()
 
 # ---- Install ----
-install ( TARGETS ${MODULE_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} )
+install ( TARGETS ${MODULE_NAME}
+    EXPORT  CUPDataModelTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
 install ( DIRECTORY inc/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hh"

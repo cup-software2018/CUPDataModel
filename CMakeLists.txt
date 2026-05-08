@@ -57,6 +57,32 @@ endif ()
 # ---- Submodules ----
 add_subdirectory ( RawObjs )
 
+# ---- CMake Package Config ----
+include ( CMakePackageConfigHelpers )
+
+configure_package_config_file (
+    cmake/CUPDataModelConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CUPDataModelConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CUPDataModel
+)
+
+write_basic_package_version_file (
+    ${CMAKE_CURRENT_BINARY_DIR}/CUPDataModelConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install ( EXPORT CUPDataModelTargets
+    NAMESPACE   CUPDataModel::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CUPDataModel
+)
+
+install ( FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/CUPDataModelConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/CUPDataModelConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CUPDataModel
+)
+
 # ---- Environment Setup Script ----
 file ( WRITE ${CMAKE_BINARY_DIR}/setup_cupdm.sh
   "#!/bin/bash
