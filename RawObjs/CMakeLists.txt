@@ -36,6 +36,7 @@ target_link_libraries ( ${MODULE_NAME}
     PUBLIC
         ROOT::Core
         ROOT::RIO
+        ROOT::Hist
 )
 
 # ---- Install ----

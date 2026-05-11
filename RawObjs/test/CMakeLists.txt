@@ -12,8 +12,8 @@ foreach ( src ${TEST_SOURCES} )
 
     target_link_libraries ( ${test_name}
         PRIVATE
-            ${ROOT_LIBRARIES}
             RawObjs
+            ROOT::Tree
     )
 
     install ( TARGETS ${test_name}
