@@ -16,10 +16,6 @@ set ( CMAKE_CXX_EXTENSIONS OFF )
 
 include ( GNUInstallDirs )
 
-# ---- Build-tree header staging area ----
-set ( CUPDM_HEADER_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include )
-file ( MAKE_DIRECTORY ${CUPDM_HEADER_OUTPUT_PATH} )
-
 # ---- Relocatable RPATH Settings (Linux) ----
 set ( CMAKE_SKIP_BUILD_RPATH FALSE )
 set ( CMAKE_BUILD_WITH_INSTALL_RPATH FALSE )
@@ -29,9 +25,6 @@ set ( CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}" )
 # ---- ROOT ----
 find_package ( ROOT REQUIRED COMPONENTS Core RIO )
 include ( ${ROOT_USE_FILE} )
-
-set ( CMAKE_ROOT_DICT_ARGS --noinclude )
-set ( ROOT_GENERATE_DICTIONARY_RELATIVE ON )
 
 # ---- Global Compiler Settings ----
 add_compile_options ( -O2 )

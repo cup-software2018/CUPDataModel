@@ -4,24 +4,21 @@ message ( STATUS "Configuring ${MODULE_NAME} ..." )
 file ( GLOB MODULE_HEADERS CONFIGURE_DEPENDS inc/*.hh )
 file ( GLOB MODULE_SOURCES CONFIGURE_DEPENDS src/*.cc )
 
-file ( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/
-     DESTINATION ${CUPDM_HEADER_OUTPUT_PATH}
-     FILES_MATCHING PATTERN "*.hh" )
-file ( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h
-     DESTINATION ${CUPDM_HEADER_OUTPUT_PATH}/${MODULE_NAME} )
+# Allow ROOT_GENERATE_DICTIONARY to locate headers by filename
+include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/inc )
 
-set ( DICT_I_FLAGS -I${CUPDM_HEADER_OUTPUT_PATH} -I${ROOT_INCLUDE_DIRS} )
-
+# Pass filenames only — rootcling embeds #include "*.hh" (no absolute path) in PCM/rootmap
 set ( DICT_HEADERS "" )
 foreach ( _h ${MODULE_HEADERS} )
     get_filename_component ( _n ${_h} NAME )
-    list ( APPEND DICT_HEADERS ${CUPDM_HEADER_OUTPUT_PATH}/${_n} )
+    list ( APPEND DICT_HEADERS ${_n} )
 endforeach ()
 
 ROOT_GENERATE_DICTIONARY ( G__${MODULE_NAME}
     ${DICT_HEADERS}
-    LINKDEF ${CUPDM_HEADER_OUTPUT_PATH}/${MODULE_NAME}/LinkDef.h
-    OPTIONS ${DICT_I_FLAGS} -Wno-inconsistent-missing-override
+    LINKDEF ${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h
+    OPTIONS -I${CMAKE_CURRENT_SOURCE_DIR}/inc -Wno-inconsistent-missing-override
+    NOINSTALL
 )
 
 add_library ( ${MODULE_NAME} SHARED
@@ -41,12 +38,6 @@ target_link_libraries ( ${MODULE_NAME}
         ROOT::RIO
 )
 
-set ( _INSTALL_HDRS "" )
-foreach ( _h ${MODULE_HEADERS} )
-    get_filename_component ( _n ${_h} NAME )
-    list ( APPEND _INSTALL_HDRS ${_n} )
-endforeach ()
-
 # ---- Install ----
 install ( TARGETS ${MODULE_NAME}
     EXPORT  CUPDataModelTargets
@@ -56,31 +47,11 @@ install ( DIRECTORY inc/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hh"
 )
-install ( CODE "
-    set ( _libdir \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\" )
-    set ( _incdir \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}\" )
-    set ( _headers \"\" )
-    foreach ( _n ${_INSTALL_HDRS} )
-        list ( APPEND _headers \"\${_incdir}/\${_n}\" )
-    endforeach ()
-    message ( STATUS \"[CUPDataModel] Regenerating PCM for ${MODULE_NAME}\" )
-    execute_process (
-        COMMAND \"${ROOT_BINDIR}/rootcling\"
-            -f \"\${_libdir}/G__${MODULE_NAME}_tmp.cxx\"
-            -s \"\${_libdir}/lib${MODULE_NAME}.so\"
-            -rml \"lib${MODULE_NAME}.so\"
-            -rmf \"\${_libdir}/lib${MODULE_NAME}.rootmap\"
-            -I\"\${_incdir}\"
-            -Wno-inconsistent-missing-override
-            \${_headers}
-            \"${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h\"
-        RESULT_VARIABLE _rc
-        ERROR_VARIABLE _err
-    )
-    file ( REMOVE \"\${_libdir}/G__${MODULE_NAME}_tmp.cxx\" )
-    if ( _rc )
-        message ( WARNING \"[CUPDataModel] PCM regeneration failed for ${MODULE_NAME}: \${_err}\" )
-    endif ()
-" )
+# PCM/rootmap have relative includes — safe to copy from build tree directly
+install ( FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/lib${MODULE_NAME}_rdict.pcm
+    ${CMAKE_CURRENT_BINARY_DIR}/lib${MODULE_NAME}.rootmap
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
 
 add_subdirectory ( test )
