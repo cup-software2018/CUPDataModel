@@ -7,6 +7,21 @@ Offline data model libraries for reading CUPDAQ raw data. Provides two independe
 
 ---
 
+## System Requirements
+
+CUPDataModel requires **C++17** and **CMake 3.16** or later. The following minimum OS/compiler versions are supported:
+
+| Platform | Minimum Version | Default Compiler |
+|----------|----------------|------------------|
+| RHEL / Rocky / Alma | **8** | GCC 8+ |
+| Fedora | **28** | GCC 8+ |
+| Ubuntu / Debian | **20.04 / Buster** | GCC 9+ |
+
+> **RHEL/CentOS 7 is not supported** — the default GCC (4.8.5) and CMake (2.8) are both too old.
+> Using `devtoolset` (SCL) may work but is not tested or recommended.
+
+---
+
 ## Dependencies
 
 | Library | Version | Required by |
@@ -27,6 +42,12 @@ cmake -S . -B build \
 cmake --build build -j$(nproc)
 cmake --install build
 ```
+
+By default, CMake installs to `/usr/local` on Linux when `-DCMAKE_INSTALL_PREFIX=` is not provided.
+
+If you run CMake as root and `-DCUPDM_AUTO_INSTALL_DEPENDENCIES=ON` (default), the build will attempt to install missing system dependencies automatically using `apt`, `apt-get`, `dnf`, or `yum`.
+
+On Ubuntu, if `snap` is available, CMake will prefer `snap install root` for ROOT instead of the Debian package names.
 
 To disable HDF5Utils:
 

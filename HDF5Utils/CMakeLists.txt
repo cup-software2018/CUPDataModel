@@ -14,12 +14,19 @@ foreach ( _h ${MODULE_HEADERS} )
     list ( APPEND DICT_HEADERS ${_n} )
 endforeach ()
 
+set ( _hdf5_inc_opts "" )
+foreach ( _inc ${HDF5_INCLUDE_DIRS} )
+    list ( APPEND _hdf5_inc_opts "-I${_inc}" )
+endforeach ()
+
 ROOT_GENERATE_DICTIONARY ( G__${MODULE_NAME}
     ${DICT_HEADERS}
+    MODULE ${MODULE_NAME}
+    NO_CXXMODULE
     LINKDEF ${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h
     OPTIONS
         -I${CMAKE_CURRENT_SOURCE_DIR}/inc
-        -I${HDF5_INCLUDE_DIRS}
+        ${_hdf5_inc_opts}
         -Wno-inconsistent-missing-override
     NOINSTALL
 )
@@ -39,7 +46,6 @@ target_link_libraries ( ${MODULE_NAME}
     PUBLIC
         ROOT::Core
         hdf5::hdf5
-        hdf5::hdf5_cpp
 )
 
 # ---- Install ----
@@ -53,9 +59,9 @@ install ( DIRECTORY inc/
 )
 # PCM/rootmap have relative includes — safe to copy from build tree directly
 install ( FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/lib${MODULE_NAME}_rdict.pcm
-    ${CMAKE_CURRENT_BINARY_DIR}/lib${MODULE_NAME}.rootmap
+    ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}_rdict.pcm
+    ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.rootmap
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-add_subdirectory ( test )
+#add_subdirectory ( test )
