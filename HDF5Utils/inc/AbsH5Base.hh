@@ -54,7 +54,6 @@ protected:
   std::size_t fBufMaxBytes{32 * 1024 * 1024};
   int fBufCount{0};
   std::size_t fBufBytesUsed{0};
-
 };
 
 inline void AbsH5Base::SetFileId(hid_t fileid) { fFile = fileid; }

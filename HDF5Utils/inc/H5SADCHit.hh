@@ -44,7 +44,6 @@ private:
 
   std::uint64_t fReadBufStart{0};
   std::uint64_t fReadBufSize{0};
-
 };
 
 // === inline definitions ===

@@ -25,7 +25,6 @@ protected:
 
   // Total number of hits processed
   std::uint64_t fTotalHits{0};
-
 };
 
 inline std::uint64_t AbsH5Hit::GetTotalHits() const { return fTotalHits; }

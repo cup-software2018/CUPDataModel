@@ -1,9 +1,7 @@
-#include "H5Log.hh"
-
 #include <hdf5.h>
 
+#include "H5Log.hh"
 #include "H5SADCEvent.hh"
-
 
 H5SADCEvent::H5SADCEvent()
   : AbsH5Event()
@@ -24,7 +22,7 @@ void H5SADCEvent::Open()
 
   if (fFile < 0) {
     H5ERROR("invalid file id (fFile = %d). SetFileId must be called before Open().",
-          static_cast<int>(fFile));
+            static_cast<int>(fFile));
     return;
   }
 

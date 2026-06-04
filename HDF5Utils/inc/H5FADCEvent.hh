@@ -14,7 +14,7 @@ public:
   void Open() override;
   void Close() override;
 
-    herr_t AppendEvent(const EventInfo_t & info, const std::vector<FChannel_t> & data);
+  herr_t AppendEvent(const EventInfo_t & info, const std::vector<FChannel_t> & data);
   herr_t ReadEvent(int n) override;
 
   void SetNDP(int ndp);
@@ -59,7 +59,6 @@ private:
   int fReadBufStart{-1};
   int fReadBufSize{0};
   std::uint64_t fPrefetchChStart{0};
-
 };
 
 inline void H5FADCEvent::SetNDP(int ndp) { fNDP = ndp; }

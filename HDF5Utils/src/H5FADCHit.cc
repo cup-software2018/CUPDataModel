@@ -1,11 +1,9 @@
-#include "H5Log.hh"
 #include <algorithm>
 #include <cstring>
-
 #include <hdf5.h>
 
 #include "H5FADCHit.hh"
-
+#include "H5Log.hh"
 
 H5FADCHit::H5FADCHit()
   : AbsH5Hit()
@@ -25,7 +23,7 @@ void H5FADCHit::Open()
 
   if (fFile < 0) {
     H5ERROR("invalid file id (fFile = %d). SetFileId must be called before Open().",
-          static_cast<int>(fFile));
+            static_cast<int>(fFile));
     return;
   }
 

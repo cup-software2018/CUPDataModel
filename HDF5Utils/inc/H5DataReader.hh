@@ -22,7 +22,6 @@ public:
 private:
   DataFile_t * fCurrentFilePtr{nullptr};
   std::vector<DataFile_t *> fFiles;
-
 };
 
 class H5DataReader {
@@ -48,7 +47,6 @@ private:
   AbsH5Base * fData;
   int fEntries; // Generalized from fNEvent
   hid_t fSubType;
-
 };
 
 inline void H5DataReader::SetData(AbsH5Base * data) { fData = data; }

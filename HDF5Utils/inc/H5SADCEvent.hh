@@ -51,7 +51,6 @@ private:
   int fReadBufStart{-1};
   int fReadBufSize{0};
   std::uint64_t fPrefetchChStart{0};
-
 };
 
 inline AChannel_t * H5SADCEvent::GetData() { return fDataBuf.data(); }

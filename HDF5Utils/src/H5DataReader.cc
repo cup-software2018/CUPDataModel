@@ -1,20 +1,18 @@
-#include "H5Log.hh"
 #include <algorithm>
 #include <cstring> // for std::strcmp
 #include <filesystem>
+#include <hdf5.h>
 #include <regex>
 #include <string>
 #include <vector>
 
-#include <hdf5.h>
-
 #include "AbsH5Base.hh"
 #include "H5DataReader.hh"
+#include "H5Log.hh"
 
 //------------------------------------------------------------------------------
 // H5ChainFile
 //------------------------------------------------------------------------------
-
 
 H5ChainFile::H5ChainFile()
   : fFiles()
@@ -79,7 +77,6 @@ hid_t H5ChainFile::GetFileId(int entno, int & local_entry, bool * file_changed)
 //------------------------------------------------------------------------------
 // H5DataReader
 //------------------------------------------------------------------------------
-
 
 H5DataReader::H5DataReader()
   : fFiles(new H5ChainFile()),

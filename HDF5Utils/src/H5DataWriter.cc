@@ -1,10 +1,8 @@
-#include "H5Log.hh"
 #include <filesystem>
-
 #include <hdf5.h>
 
 #include "H5DataWriter.hh"
-
+#include "H5Log.hh"
 
 H5DataWriter::H5DataWriter()
   : fFilename(),
@@ -98,14 +96,13 @@ void H5DataWriter::PrintStats() const
   std::string base;
   try {
     base = std::filesystem::path(fFilename).filename().string();
-  }
-  catch (...) {
+  } catch (...) {
     base = fFilename;
   }
 
   // Changed to use GetSubRunEntries so it reflects "Hits" or "Events" dynamically
   const int nentries = fData ? static_cast<int>(fData->GetSubRunEntries()) : 0;
 
-  H5INFO("%d entries written in %s (%.2f | %.2f [MB], %.2f%%)", nentries, base.c_str(),
-       memsize, filesize, ratio);
+  H5INFO("%d entries written in %s (%.2f | %.2f [MB], %.2f%%)", nentries, base.c_str(), memsize,
+         filesize, ratio);
 }

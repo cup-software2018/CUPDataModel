@@ -10,7 +10,7 @@
 class AbsH5Event : public AbsH5Base {
 public:
   AbsH5Event() = default;
-  ~AbsH5Event() override = default;  // override AbsH5Base virtual dtor
+  ~AbsH5Event() override = default; // override AbsH5Base virtual dtor
 
   // Retrieve the current event metadata
   EventInfo_t GetEventInfo() const;
@@ -33,7 +33,6 @@ protected:
 
   // Internal buffer for event metadata
   std::vector<EventInfo_t> fEvtBuf;
-
 };
 
 inline EventInfo_t AbsH5Event::GetEventInfo() const { return fEvtInfo; }
